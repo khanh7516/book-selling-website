@@ -34,12 +34,12 @@ public class Comment {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private User book;
+    private Book book;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "blog_id")
-    private User blog;
+    private Blog blog;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -70,13 +70,13 @@ public class Comment {
     }
 
 
-    public void setBook(User book) {
+    public void setBook(Book book) {
         if (blog == null) {
             this.book = book;
         }
     }
 
-    public void setBlog(User blog) {
+    public void setBlog(Blog blog) {
         if (book == null) {
             this.blog = blog;
         }
