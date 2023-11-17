@@ -41,18 +41,18 @@
 <!--			<groupId>org.thymeleaf.extras</groupId>-->
 <!--			<artifactId>thymeleaf-extras-springsecurity6</artifactId>-->
 <!--		</dependency>-->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>commons-io</groupId>-->
+<!--			<artifactId>commons-io</artifactId>-->
+<!--			<version>2.6</version>-->
+<!--		</dependency>-->
 
-		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.4</version>
-		</dependency>
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>commons-fileupload</groupId>-->
+<!--			<artifactId>commons-fileupload</artifactId>-->
+<!--			<version>1.4</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -69,17 +69,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.security</groupId>-->
+<!--			<artifactId>spring-security-test</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
+
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version> <!-- Chọn phiên bản phù hợp -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
+
+
 
 	</dependencies>
 

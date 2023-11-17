@@ -33,10 +33,6 @@ public class ImageFile {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
 
     @PrePersist
     public void prePersist() {

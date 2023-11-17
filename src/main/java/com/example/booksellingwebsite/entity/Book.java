@@ -45,21 +45,21 @@ public class Book {
     @JoinColumn(name = "book_author_id")
     private Author author;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters = new ArrayList<>();
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageFile> images = new ArrayList<>();
+    @OneToMany(mappedBy = "book",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookImage> images = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "book_type",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "type_id"))
-    private List<Role> typeList = new ArrayList<>();
+    private List<BookType> typeList = new ArrayList<>();
 
 
     @ManyToMany

@@ -7,7 +7,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,30 +26,41 @@ public class User {
 
     @Column(name = "first_name", length = 30, nullable = false)
     private String firstName;
+
     @Column(name = "last_name", length = 30, nullable = false)
     private String lastName;
-    @Column(name = "phone_number",nullable = false)
+
+    @Column(name = "phone_number",nullable = false, length = 10)
     private String phoneNumber;
+
     @Column(name = "address",nullable = false)
     private String address;
-    @Column(name = "username", nullable = false)
+
+    @Column(name = "username", nullable = false, length = 30)
     private String username;
-    @Column(name = "password", nullable = false)
+
+    @Column(name = "password", nullable = false, length = 30)
     private String password;
-    @Column(name = "email" ,nullable = false)
+
+    @Column(name = "email" ,nullable = false, length = 128)
     private String email;
+
+    @Column(name = "avatar", length = 64)
+    private String avatar;
+
     @Column(name = "CCCD")
     private String cccd;
 
+    private boolean enabled;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="tbl_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles = new ArrayList<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -63,6 +76,42 @@ public class User {
     private LocalDateTime deletedAt;
 
 
+
+
+
+
+
+
+    public User(String firstName, String lastName, String phoneNumber, String address, String username, String password, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 
 
     @PrePersist
