@@ -17,18 +17,23 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileRestController<T> {
 
     private final FileService<ImageFile> imageService;
-    private final FileService<PdfFile> pdfService;
+//    private final FileService<PdfFile> pdfService;
 
     @Autowired
-    public FileRestController(FileService<ImageFile> imageService, FileService<PdfFile> pdfService) {
+    public FileRestController(FileService<ImageFile> imageService) {
         this.imageService = imageService;
-        this.pdfService = pdfService;
+    }
+
+
+    @GetMapping("/image")
+    public ResponseEntity<?> getFilesOfCurrentUser() {
+        return ResponseEntity.ok(imageService.getFilesOfCurrentUser());
     }
 
     @PostMapping("/image")
     public ResponseEntity<?> uploadImg(@RequestParam("file") MultipartFile file) {
-        imageService.uploadFile(file);
-        return ResponseEntity.status(HttpStatus.CREATED).body("File uploaded successfully");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadFile(file));
     }
 
     @GetMapping("/image/{id}")
@@ -40,19 +45,27 @@ public class FileRestController<T> {
     }
 
 
-
-    @PostMapping("/pdf")
-    public ResponseEntity<?> uploadPdf(@RequestParam("file") MultipartFile file){
-        pdfService.uploadFile(file);
-        return ResponseEntity.status(HttpStatus.CREATED).body("File uploaded successfully");
+    @DeleteMapping("/image/{id}")
+    public ResponseEntity<?> deleteFile(@PathVariable Integer id) {
+        imageService.deleteFile(id);
+        // Code logic
+        return ResponseEntity.noContent().build(); // 204
     }
 
-    @GetMapping("/pdf/{id}")
-    public ResponseEntity<?> readPdf(@PathVariable Integer id) {
-        PdfFile file = pdfService.getFileById(id);
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(file.getType()))
-                .body(file.getData());
-    }
+
+
+//    @PostMapping("/pdf")
+//    public ResponseEntity<?> uploadPdf(@RequestParam("file") MultipartFile file){
+//        pdfService.uploadFile(file);
+//        return ResponseEntity.status(HttpStatus.CREATED).body("File uploaded successfully");
+//    }
+//
+//    @GetMapping("/pdf/{id}")
+//    public ResponseEntity<?> readPdf(@PathVariable Integer id) {
+//        PdfFile file = pdfService.getFileById(id);
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(file.getType()))
+//                .body(file.getData());
+//    }
 
 }
