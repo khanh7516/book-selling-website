@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,7 +40,13 @@ public class Author {
     @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime deletedAt;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name="tbl_author_category",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "catgory_id")
+    )
+    private Set<Category> categories = new HashSet<>();
 
 
     @PrePersist

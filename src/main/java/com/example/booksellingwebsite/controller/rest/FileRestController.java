@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class FileRestController<T> {
@@ -33,7 +32,7 @@ public class FileRestController<T> {
     @PostMapping("/image")
     public ResponseEntity<?> uploadImg(@RequestParam("file") MultipartFile file) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadFile(file));
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadFile(file, "avatar"));
     }
 
     @GetMapping("/image/{id}")
@@ -50,6 +49,12 @@ public class FileRestController<T> {
         imageService.deleteFile(id);
         // Code logic
         return ResponseEntity.noContent().build(); // 204
+    }
+
+    @PostMapping("/image/category")
+    public ResponseEntity<?> uploadImgCategory(@RequestParam("file") MultipartFile file) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(imageService.uploadFile(file, "category"));
     }
 
 

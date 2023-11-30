@@ -12,7 +12,7 @@ import java.util.List;
 public interface FileService<T> {
 
 
-    T uploadFile(MultipartFile file);
+    T uploadFile(MultipartFile file, String field);
 
     T getFileById(Integer id);
 

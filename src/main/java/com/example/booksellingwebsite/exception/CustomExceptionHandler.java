@@ -49,8 +49,7 @@ public class CustomExceptionHandler {
         });
 
         return new ResponseEntity<>(
-                new ErrorResponse(HttpStatus.BAD_REQUEST, errors) {
-                },
+                new ErrorResponse(HttpStatus.BAD_REQUEST, errors),
                 HttpStatus.BAD_REQUEST
         );
     }

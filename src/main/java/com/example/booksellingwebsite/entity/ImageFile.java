@@ -26,6 +26,9 @@ public class ImageFile {
     @Column(name = "type")
     private String type; // image/png, image/jpg, ...
 
+    @Column
+    private String field;
+
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 

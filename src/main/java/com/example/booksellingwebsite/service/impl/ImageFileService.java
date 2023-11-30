@@ -34,7 +34,7 @@ public class ImageFileService implements FileService<ImageFile> {
 
 
     @Override
-    public ImageFile uploadFile(MultipartFile file) {
+    public ImageFile uploadFile(MultipartFile file, String field) {
 
         String originalFilename = file.getOriginalFilename().toLowerCase();
         if (!originalFilename.endsWith(".jpeg") && !originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png")) {
@@ -48,6 +48,8 @@ public class ImageFileService implements FileService<ImageFile> {
         } catch (IOException e) {
             throw new BadRequestException("Cannot read file!"); // Ném lại ngoại lệ IOException
         }
+
+        image.setField(field);
         // TODO : Giả định userId = 1, sau này userId chính là user đang login
         Integer userId = 1;
 
@@ -58,6 +60,11 @@ public class ImageFileService implements FileService<ImageFile> {
         imageFileRepository.save(image);
         return image;
     }
+
+
+
+
+
 
     @Override
     public ImageFile getFileById(Integer id) {
