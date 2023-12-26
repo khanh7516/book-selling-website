@@ -1,13 +1,12 @@
 package com.example.booksellingwebsite.entity;
 
-import com.example.booksellingwebsite.enums.PurchasedEbookStatus;
-import com.example.booksellingwebsite.enums.UserStatus;
+
+import com.example.booksellingwebsite.enums.CommentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,24 +14,31 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tbl_purchased_ebook")
-public class PurchasedEbook {
+@Table(name = "tbl_comment")
+public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
+    private double rate;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "book_id")
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PurchasedEbookStatus status;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
@@ -40,17 +46,12 @@ public class PurchasedEbook {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deletedAt;
-
-
 
 
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
-        status = PurchasedEbookStatus.ACTIVE;
     }
 
     @PreUpdate
@@ -59,4 +60,16 @@ public class PurchasedEbook {
     }
 
 
+    public void setBook(Book book) {
+        if (blog == null) {
+            this.book = book;
+        }
+    }
+
+    public void setBlog(Blog blog) {
+        if (book == null) {
+            this.blog = blog;
+        }
+    }
 }
+

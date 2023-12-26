@@ -2,6 +2,7 @@ package com.example.booksellingwebsite.entity;
 
 
 import com.example.booksellingwebsite.enums.UserStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,8 +34,6 @@ public class User {
     @Column(name = "phone_number",nullable = false, length = 10)
     private String phoneNumber;
 
-    @Column(name = "address",nullable = false)
-    private String address;
 
     @Column(name = "username", nullable = false, length = 30)
     private String username;
@@ -48,10 +47,25 @@ public class User {
     @Column(name = "avatar", length = 64)
     private String avatar;
 
-    @Column(name = "CCCD")
-    private String cccd;
 
     private boolean enabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Address> addresses = new ArrayList<>();
+
+
+    @Embedded
+    @ElementCollection
+    @CollectionTable(name = "payment_information", joinColumns = @JoinColumn(name = "user_id"))
+    private List<PaymentInformation> paymentInfomations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany
+    @JsonIgnore
+    private List<Review> reviews = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -72,8 +86,6 @@ public class User {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deletedAt;
 
 
 
@@ -81,12 +93,10 @@ public class User {
 
 
 
-
-    public User(String firstName, String lastName, String phoneNumber, String address, String username, String password, String email) {
+    public User(String firstName, String lastName, String phoneNumber, String username, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.address = address;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -100,7 +110,6 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +

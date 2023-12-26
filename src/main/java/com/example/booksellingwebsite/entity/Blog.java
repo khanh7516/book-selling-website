@@ -37,12 +37,8 @@ public class Blog {
     private String thumbnail;
 
 
-    @ManyToOne
-    @JoinColumn(name = "blogger_id")
-    private Blogger blogger;
-
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Rating> comments = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "blog_category",
@@ -61,12 +57,6 @@ public class Blog {
 
     @Column(name = "published_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime publishedAt;
-
-    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deletedAt;
-
-
-
 
 
     @PrePersist

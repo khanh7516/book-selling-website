@@ -1,20 +1,21 @@
 package com.example.booksellingwebsite.entity;
 
 
-import com.example.booksellingwebsite.enums.BookStatus;
-import com.example.booksellingwebsite.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "tbl_book")
 public class Book {
@@ -22,55 +23,66 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "alias", nullable = false, unique = true)
+    private String alias;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String shortDescription;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String fullDescription;
+
+    private boolean enabled;
+
+    private float cost;
+
     @Column(name = "price", nullable = false)
-    private Float price;
+    private float price;
 
-    @Column(name = "detail", columnDefinition = "TEXT")
-    private String detail;
+    @Column(name = "discount_percent")
+    private float discountPercent;
 
-    @Column
-    private String thumbnail;
+    @Column(length = 128)
+    private String image;
 
     @Column(name = "quantity_in_stock", nullable = false)
     private Integer quantityInStock;
 
-    @ManyToOne
-    @JoinColumn(name = "book_seller_id")
-    private BookSeller bookSeller;
+
+//    @Embedded
+//    @ElementCollection
+//    @Column(name = "covers")
+//    private Set<BookCover> bookCovers = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "book_author_id")
+    @JoinColumn(name = "author_id")
     private Author author;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chapter> chapters = new ArrayList<>();
+    @Column
+    private Integer numRatings;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name="tbl_book_category",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "catgory_id")
+    )
+    private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "book",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookImage> images = new ArrayList<>();
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "book_type",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "type_id"))
-    private List<BookType> typeList = new ArrayList<>();
-
-
-    @ManyToMany
-    @JoinTable(name = "book_category",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories = new ArrayList<>();
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BookStatus status;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
@@ -78,22 +90,31 @@ public class Book {
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deletedAt;
-
-
-
-
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
-        status = BookStatus.SELLALL;
     }
+
+
+
 
     @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
+
+    public void addImages(String url) {
+        this.images.add(new BookImage(url, this));
+    }
+    public void removeImages(BookImage bookImage) {
+        this.images.remove(bookImage);
+    }
+
 
 }

@@ -58,6 +58,7 @@ public class Category {
 
 
 
+
     public Category(Integer id) {
         this.id = id;
     }
@@ -68,7 +69,10 @@ public class Category {
     }
 
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
     @PrePersist
     public void prePersist() {
